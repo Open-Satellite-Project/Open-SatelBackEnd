@@ -36,7 +36,7 @@ public class Operationtime {
    private LocalTime starttime;
 
    @Column
-   private LocalTime endtime; // endTime -> endtime으로 변경
+   private LocalTime endtime;
 
    @Column
    private boolean weekdayonly;

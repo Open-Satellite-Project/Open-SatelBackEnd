@@ -21,6 +21,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 // 저장소 위치 설정
 @EnableJpaRepositories(basePackages = { "com.example.repository" })
 
+
+
 public class ShuttleApplication {
 
 	public static void main(String[] args) {

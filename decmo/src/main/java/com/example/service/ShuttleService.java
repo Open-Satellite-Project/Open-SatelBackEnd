@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.entity.Timeslot;
+import com.example.entity.Users;
 import com.example.repository.DepartuetimeRepository;
 import com.example.repository.StopRepository;
 import com.example.repository.TimeslotRepository;
+import com.example.repository.UsersRepository;
 
 @Service
 public class ShuttleService {
@@ -19,17 +20,19 @@ public class ShuttleService {
     final TimeslotRepository timeslotRepository;
     final DepartuetimeRepository departuetimeRepository;
     final StopRepository stopRepository;
+    final UsersRepository usersRepository;
 
     public ShuttleService(
             TimeslotRepository timeslotRepository,
             DepartuetimeRepository departuetimeRepository,
-            StopRepository stopRepository) {
+            StopRepository stopRepository, UsersRepository usersRepository) {
         this.timeslotRepository = timeslotRepository;
         this.departuetimeRepository = departuetimeRepository;
         this.stopRepository = stopRepository;
+        this.usersRepository = usersRepository;
     }
 
-    // 고객용 스케쥴 리스트
+    // 고객용 스케줄 리스트
     public Map<String, Object> getcustTimetable() {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -59,10 +62,13 @@ public class ShuttleService {
     public Map<String, Object> getTimetable() {
         Map<String, Object> response = new HashMap<>();
         try {
-            List<Timeslot> timeSlots = timeslotRepository.findAll();
+            List<Timeslot> timeSlots = timeslotRepository.findAllWithStop();
+            System.out.println("조회된 시간표 데이터: " + timeSlots);
             response.put("timeSlots", timeSlots);
             response.put("status", "success");
         } catch (Exception e) {
+            System.out.println("시간표 조회 중 오류 발생: " + e.getMessage());
+            e.printStackTrace(); // 스택 트레이스 출력
             response.put("status", "error");
             response.put("message", e.getMessage());
         }
@@ -152,4 +158,7 @@ public class ShuttleService {
         return response;
     }
 
+    public List<Users> getAllMembers(){
+        return usersRepository.findAll();
+    }
 }

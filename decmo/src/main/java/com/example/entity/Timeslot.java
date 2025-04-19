@@ -38,17 +38,25 @@ public class Timeslot {
     @Column
     private LocalDateTime lastmodified;
 
-    // 새로 추가한 type 컬럼
     @Column
     private String type;
 
-    // Lombok @Getter, @Setter가 있지만, 
-    // isactive 필드에 대한 Getter/Setter를 직접 작성해두셨으므로 그대로 둡니다.
     public Boolean getIsactive() {
         return isactive;
     }
 
     public void setIsactive(Boolean isactive) {
         this.isactive = isactive;
+    }
+
+    @Override
+    public String toString() {
+        return "Timeslot{" +
+                "slotid=" + slotid +
+                ", hourrange='" + hourrange + '\'' +
+                ", type='" + type + '\'' +
+                ", isactive=" + isactive +
+                ", stop=" + (stop != null ? stop.getStopname() : "null") +
+                '}';
     }
 }

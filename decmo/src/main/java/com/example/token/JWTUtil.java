@@ -40,19 +40,22 @@ public class JWTUtil {
     Date expiredAtDate = Date.from(expireAt.atZone(ZoneId.systemDefault()).toInstant());
 
     // 로그인 후 JWT 생성
-    public String createTokenForAdmin(int adminEmail) {
+    public String createTokenForAdmin(String adminEmail, String role) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("adminEmail", adminEmail); // key: 제거, 문자열만 넣기
-
+        claims.put("adminEmail", adminEmail);
+        claims.put("role", role);
         return createToken(claims);
     }
 
     public String createToken(Map<String, Object> map) {
         // map에 있는 내용을 key에 있는 암호키를 이용해 HS256 알고리즘으로 4시간짜리 토큰 생성
         return builder()
+
+                .setClaims(map)
+                .setSubject((String) map.get("adminEmail"))
+                .setExpiration(Date.from(LocalDateTime.now().plusHours(4)
+                        .atZone(ZoneId.systemDefault()).toInstant()))
                 .signWith(key, SignatureAlgorithm.HS256)
-                .claims(map)
-                .expiration(expiredAtDate)
                 .compact();
     }
 
@@ -70,5 +73,7 @@ public class JWTUtil {
                 throw new RuntimeException("사용불가 토큰입니다.");
             }
         }
+
     }
+
 }
